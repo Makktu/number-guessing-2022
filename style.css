@@ -39,3 +39,9 @@ button {
     margin-top: 30px;
     display: inline-block;
 }
+
+.higher-lower {
+    margin-top: 10px;
+    font-size: 2rem;
+    color: greenyellow;
+}

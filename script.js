@@ -1,6 +1,16 @@
 "use strict";
 
+document.onkeypress = function (e) {
+    if (e.key === "y" && awaitingPlayer) {
+        awaitingPlayer = false;
+        gameReset();
+    }
+    // use e.keyCode
+};
+
 const playerMessages = document.querySelector(".higher-lower");
+
+let awaitingPlayer = false;
 
 const playerGuessBox = document.getElementById("guess");
 playerGuessBox.value = "";
@@ -26,6 +36,7 @@ function gameReset() {
     guessesToGo = 10;
     guessesMade = [];
     playerGuessBox.value = "";
+    playerMessages.textContent = "";
     computerNumber = Math.floor(Math.random() * 100) + 1;
     guessesTaken.textContent = `Guesses Taken: ${guessedAlready}`;
     guessesLeft.textContent = `Guesses Remaining: ${guessesToGo}`;
@@ -34,25 +45,27 @@ function gameReset() {
 function guessSubmitted() {
     let playerGuess = playerGuessBox.value;
     if (+playerGuess % 1 !== 0 || +playerGuess < 1 || +playerGuess > 100) {
-        console.log("invalid input - enter numbers between 1 and 100 only");
+        playerMessages.textContent =
+            "invalid input - enter numbers between 1 and 100 only";
         return;
     }
     if (+playerGuess < computerNumber || +playerGuess > computerNumber) {
         guessedAlready++;
         guessesToGo--;
-        if (+playerGuess < computerNumber) console.log("Higher");
-        if (+playerGuess > computerNumber) console.log("Lower");
+        if (+playerGuess < computerNumber)
+            playerMessages.textContent = "Higher";
+        if (+playerGuess > computerNumber) playerMessages.textContent = "Lower";
         guessesTaken.textContent = `Guesses Taken: ${guessedAlready}`;
         guessesLeft.textContent = `Guesses Remaining: ${guessesToGo}`;
         if (guessedAlready == 10) {
-            console.log("Game over - lose");
+            playerMessages.textContent = "Game over - lose";
             gameReset();
         }
     }
 
     if (+playerGuess == computerNumber) {
-        console.log("You win!");
-        gameReset();
+        playerMessages.innerHTML = "You win!<br><br>Play Again? (Y/N)";
+        awaitingPlayer = true;
     }
     // check that input is valid - notify if not and return without changing any values
 
